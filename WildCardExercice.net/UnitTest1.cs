@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WildCardExercice.net
@@ -6,8 +7,8 @@ namespace WildCardExercice.net
     public class WildCard
     {
         const char WILDCARD_ANY_CHAR_ZERO_OR_MORE = '*';
-        const char WILDCARD_ANY_CHAR_ONE_OR_MORE = '+';
-        const char WILDCARD_ANY_CHAR = '?';
+        const char WILDCARD_ANY_CHAR_ONE_OR_MORE  = '+';
+        const char WILDCARD_ANY_CHAR              = '?';
 
         public bool IsMatch(String s, String p)
         {
@@ -18,13 +19,17 @@ namespace WildCardExercice.net
             if(patternX == pattern.Length)
                 return sX == s.Length;
 
-            if( pattern[patternX] == WILDCARD_ANY_CHAR_ZERO_OR_MORE ||
-                pattern[patternX] == WILDCARD_ANY_CHAR_ONE_OR_MORE )
+            if(pattern[patternX] == WILDCARD_ANY_CHAR_ZERO_OR_MORE || pattern[patternX] == WILDCARD_ANY_CHAR_ONE_OR_MORE)
             {
+                var isPlusChar = pattern[patternX] == WILDCARD_ANY_CHAR_ONE_OR_MORE;
+                if(isPlusChar) // With the + we must at least mach one char, accept the + to match the current char
+                    sX += 1;
+
                 // Skip the * or any *** or + or any +++
-                while (patternX < pattern.Length && (
+                while ( patternX < pattern.Length && (
                     pattern[patternX] == WILDCARD_ANY_CHAR_ZERO_OR_MORE ||
-                    pattern[patternX] == WILDCARD_ANY_CHAR_ONE_OR_MORE ))
+                    pattern[patternX] == WILDCARD_ANY_CHAR_ONE_OR_MORE )
+                )
                 {
                     patternX += 1;
                 }
@@ -33,14 +38,14 @@ namespace WildCardExercice.net
                 {
                     if(helper(s, pattern, sX, patternX)) 
                         return true;
-                    sX += 1;
+                    sX += 1; // If we failied matching skipping one char try to skip two...
                 }
-                return helper(s, pattern, sX, patternX);
+                return helper(s, pattern, sX, patternX); // Do not forget the final evaluation in case we reach the end of the string
             }
             else if(sX < s.Length) {
-
+                // Direct char to char or char to ? match
                 if( (s[sX] == pattern[patternX]) || (pattern[patternX] == WILDCARD_ANY_CHAR) )
-                    return helper(s, pattern, sX+1, patternX+1);
+                    return helper(s, pattern, sX+1, patternX+1); // Move to next char
             }
             return false;
         }
@@ -68,12 +73,11 @@ namespace WildCardExercice.net
             Assert.IsFalse(new WildCard().IsMatch("abc", "abZ"));
 
             Assert.IsTrue(new WildCard().IsMatch("abcde", "abcde"));
-
         }
+
         [TestMethod]
         public void IsMatch_QuestionMark()
         {
-           
             Assert.IsTrue(new WildCard().IsMatch("abc", "a?c"));
             Assert.IsFalse(new WildCard().IsMatch("abc", "a?Z"));
 
@@ -88,31 +92,47 @@ namespace WildCardExercice.net
 
             Assert.IsFalse(new WildCard().IsMatch("abc", "abc?"));
         }
+
         [TestMethod]
-        public void IsMatch_Star()
+        public void IsMatch_OneStarOrOnePlus()
         {
-            Assert.IsTrue(new WildCard().IsMatch("abcd", "a*d"));
-            Assert.IsTrue(new WildCard().IsMatch("abcd", "ab*"));
-            Assert.IsTrue(new WildCard().IsMatch("abcd", "abc*"));
-            Assert.IsTrue(new WildCard().IsMatch("abcd", "abcd*"));
+            var text = "abcd";
+            var patterns = new List<string>() { "a*d", "ab*", "abc*" };
+            patterns.ForEach((pattern) => {
+                Assert.IsTrue(new WildCard().IsMatch(text, pattern));
+                Assert.IsTrue(new WildCard().IsMatch(text, pattern.Replace("*", "+")));
+            });
+            Assert.IsTrue(new WildCard().IsMatch(text, "abcd*"));
         }
 
         [TestMethod]
-        public void IsMatch_NonSequentialMultiStar()
+        public void IsMatch_NonSequentialMultiStarOrPlus()
         {
-            Assert.IsTrue(new WildCard().IsMatch("a*c*e", "a*c*e"));
+            var text = "abcde";
+            var patterns = new List<string>() {"a*c*e" };
+            patterns.ForEach((pattern) => {
+                Assert.IsTrue(new WildCard().IsMatch(text, pattern));
+                Assert.IsTrue(new WildCard().IsMatch(text, pattern.Replace("*", "+")));
+            });
         }
 
         [TestMethod]
         public void IsMatch_SequentialMultiStar()
         {
-            Assert.IsTrue(new WildCard().IsMatch("abcd", "a***d"));
+            var text = "abcd";
+            var patterns = new List<string>() {"a***d" };
+            patterns.ForEach((pattern) => {
+                Assert.IsTrue(new WildCard().IsMatch(text, pattern));
+                Assert.IsTrue(new WildCard().IsMatch(text, pattern.Replace("*", "+")));
+            });
         }
 
         [TestMethod]
         public void IsMatch_StarMatchingZeroChar()
         {
             Assert.IsTrue(new WildCard().IsMatch("abcd", "a*bcd"));
+            Assert.IsTrue(new WildCard().IsMatch("abcd", "abcd*"));
+            Assert.IsTrue(new WildCard().IsMatch("abcd", "*abcd"));
         }
 
         [TestMethod]
@@ -121,13 +141,14 @@ namespace WildCardExercice.net
             Assert.IsTrue(new WildCard().IsMatch("abcd", "a+d"));
             Assert.IsTrue(new WildCard().IsMatch("abcd", "ab+"));
             Assert.IsTrue(new WildCard().IsMatch("abcd", "abc+"));
-            Assert.IsTrue(new WildCard().IsMatch("abcd", "abcd+"));
         }
 
         [TestMethod]
         public void IsMatch_PlusMatchingZeroCharMustFail()
         {
-            Assert.IsTrue(new WildCard().IsMatch("abcd", "a+bcd"));
+            Assert.IsFalse(new WildCard().IsMatch("abcd", "a+bcd"));
+            Assert.IsFalse(new WildCard().IsMatch("abcd", "abcd+"));
+            Assert.IsFalse(new WildCard().IsMatch("abcd", "+abcd"));
         }
     }
 }
