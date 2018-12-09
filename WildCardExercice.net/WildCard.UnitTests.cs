@@ -63,7 +63,7 @@ namespace WildCardExercice.net
         public void IsMatch_NonSequentialMultiStarOrPlus()
         {
             var text     = "abcde";
-            var patterns = new List<string>() { "a*c*e", "a**c**e" };
+            var patterns = new List<string>() { "a*c*e", "a**c**e", "a***c***e", "a****c****e" };
 
             patterns.ForEach((pattern) => {
 
