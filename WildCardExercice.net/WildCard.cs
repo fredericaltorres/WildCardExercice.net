@@ -36,7 +36,7 @@ namespace WildCardExercice.net
                 {
                     if(helper(s, pattern, sX, patternX)) 
                         return true;
-                    sX += 1; // If we failied matching skipping one char try to skip two...
+                    sX += 1; // If we failed matching, skip one char try to skip two...
                 }
                 return helper(s, pattern, sX, patternX); // Do not forget the final evaluation in case we reach the end of the string
             }
