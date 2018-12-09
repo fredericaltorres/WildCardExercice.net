@@ -61,7 +61,16 @@ namespace WildCardExercice.net
         public void IsMatch_NonSequentialMultiStarOrPlus()
         {
             var text = "abcde";
-            var patterns = new List<string>() {"a*c*e" };
+            var patterns = new List<string>() { "a*c*e", "a**c**e" };
+            patterns.ForEach((pattern) => {
+                Assert.IsTrue(new WildCard().IsMatch(text, pattern));
+                Assert.IsTrue(new WildCard().IsMatch(text, pattern.Replace("*", "+")));
+            });
+
+            text = "abcdefghi";
+            patterns = new List<string>() {
+                "a*c*e*g*i", "a*i", "ab*hi", "ab*f*hi", "ab*f?hi", "ab*f?h*", "?b*f?h*", "*b*f?h*"
+            };
             patterns.ForEach((pattern) => {
                 Assert.IsTrue(new WildCard().IsMatch(text, pattern));
                 Assert.IsTrue(new WildCard().IsMatch(text, pattern.Replace("*", "+")));
