@@ -2,7 +2,11 @@
 
 namespace WildCardExercice.net
 {
-    public class WildCard
+
+    /// <summary>
+    /// Wildcard implementation using recursion
+    /// </summary>
+    public class RecursiveWildCard : IWildCard
     {
         const char WILDCARD_ANY_CHAR_ZERO_OR_MORE = '*';
         const char WILDCARD_ANY_CHAR_ONE_OR_MORE  = '+';
