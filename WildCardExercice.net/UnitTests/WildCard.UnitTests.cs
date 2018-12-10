@@ -6,12 +6,12 @@ namespace WildCardExercice.net
     [TestClass]
     public class WildCardUnitTests
     {
+        //IWildCard w = new RecursiveWildCard();
+        IWildCard w = new DynamicProgrammingWildCard();
+
         [TestMethod]
         public void IsMatch_JustStringExpression()
         {
-            //IWildCard w = new RecursiveWildCard();
-            IWildCard w = new DynamicProgrammingWildCard();
-
             //Assert.IsTrue (w.IsMatch("", ""));
             //Assert.IsFalse(w.IsMatch("", "a"));
 
@@ -33,8 +33,6 @@ namespace WildCardExercice.net
         [TestMethod]
         public void IsMatch_QuestionMark()
         {
-            IWildCard w = new RecursiveWildCard();
-
             Assert.IsTrue (w.IsMatch("abc", "a?c"));
             Assert.IsFalse(w.IsMatch("abc", "a?Z"));
 
@@ -53,8 +51,6 @@ namespace WildCardExercice.net
         [TestMethod]
         public void IsMatch_OneStarOrOnePlus()
         {
-            IWildCard w = new RecursiveWildCard();
-
             var text     = "abcd";
             var patterns = new List<string>() { "a*d", "ab*", "abc*" };
 
@@ -69,7 +65,6 @@ namespace WildCardExercice.net
         [TestMethod]
         public void IsMatch_NonSequentialMultiStarOrPlus()
         {
-            IWildCard w  = new RecursiveWildCard();
             var text     = "abcde";
             var patterns = new List<string>() { "a*c*e", "a**c**e", "a***c***e", "a****c****e" };
 
@@ -94,7 +89,6 @@ namespace WildCardExercice.net
         [TestMethod]
         public void IsMatch_SequentialMultiStar()
         {
-            IWildCard w  = new RecursiveWildCard();
             var text     = "abcd";
             var patterns = new List<string>() {"a***d" };
 
@@ -108,7 +102,6 @@ namespace WildCardExercice.net
         [TestMethod]
         public void IsMatch_StarMatchingZeroChar()
         {
-            IWildCard w  = new RecursiveWildCard();
             Assert.IsTrue(w.IsMatch("abcd", "a*bcd"));
             Assert.IsTrue(w.IsMatch("abcd", "abcd*"));
             Assert.IsTrue(w.IsMatch("abcd", "*abcd"));
@@ -117,7 +110,8 @@ namespace WildCardExercice.net
         [TestMethod]
         public void IsMatch_Plus()
         {
-            IWildCard w  = new RecursiveWildCard();
+            Assert.IsTrue(w.IsMatch("abc", "ab+"));
+
             Assert.IsTrue(w.IsMatch("abcd", "a+d"));
             Assert.IsTrue(w.IsMatch("abcd", "ab+"));
             Assert.IsTrue(w.IsMatch("abcd", "abc+"));
@@ -126,7 +120,6 @@ namespace WildCardExercice.net
         [TestMethod]
         public void IsMatch_PlusMatchingZeroCharMustFail()
         {
-            IWildCard w  = new RecursiveWildCard();
             Assert.IsFalse(w.IsMatch("abcd", "a+bcd"));
             Assert.IsFalse(w.IsMatch("abcd", "abcd+"));
             Assert.IsFalse(w.IsMatch("abcd", "+abcd"));

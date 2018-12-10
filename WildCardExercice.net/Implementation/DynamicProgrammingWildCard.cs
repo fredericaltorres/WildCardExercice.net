@@ -1,6 +1,33 @@
 ﻿namespace WildCardExercice.net
 {
     /*
+     
+
+    string     :"ab"
+    pattern    :"az"
+
+            Pattern
+                0   1   2
+                    a   z
+        -------------------
+        0       T   F   F    [0,0] is T  
+        1   a   F   T   F    [1,1] is T
+        2   b   F   F   F
+
+    string     :"abc"
+    pattern    :"ab+"
+
+            Pattern
+                0   1   2   3   
+                    a   b   +
+        -----------------------
+        0       T   F   F   F
+        1   a   F   T   F   F
+        2   b   F   F   T   F
+        3   c   F   F   F   T
+
+
+
      string     :"xaylmz"
      pattern    :"x?y*z"
 
@@ -36,56 +63,45 @@
     /// </summary>
     public class DynamicProgrammingWildCard : IWildCard
     {
-        public bool IsMatch(string s, string p)
+        public bool IsMatch(string s, string pp)
         {
-            //if(string.IsNullOrEmpty(s) && string.IsNullOrEmpty(p))
-            //    return true;
-            //if(string.IsNullOrEmpty(s) && !string.IsNullOrEmpty(p))
-            //    return false;
-            var str = s.ToCharArray();
+            var p = pp;
+            while(p.Contains("**")) // Replace ** with *
+                p = p.Replace("**", "*");
+            while(p.Contains("++")) // Replace ++ with +
+                p = p.Replace("++", "+");
+
+            var str     = s.ToCharArray();
             var pattern = p.ToCharArray();
-            var writeIndex = 0;
-            var isFirst = true;
+            int dim2    = pattern.Length+1;
+            int dim1    = str.Length+1;
+            bool[,] T   = new bool[dim1, dim2];
+            T[0, 0]     = true;
 
-            //// Replace multiple * with 1
-            //// a**b**c -> a*b*c
-            //for(var i = 0; i < pattern.Length; i++)
-            //{
-            //    if(pattern[i] == '*')
-            //    {
-            //        if(isFirst)
-            //        {
-            //            pattern[writeIndex++] = pattern[i];
-            //            isFirst = false;
-            //        }
-            //    }
-            //    else {
-            //        pattern[writeIndex++] = pattern[i];
-            //        isFirst = true;
-            //    }
-            //}
-
-            int dim2 = pattern.Length+1;
-            int dim1 = str.Length+1;
-            bool[,] T = new bool[dim1, dim2];
-            T[0, 0] = true;
+            if(pattern[0] == '*')
+            {
+                T[0, 1] = true;
+            }
 
             for(var i = 1; i < dim1; i++)
             {
                 for(var j = 1; j < dim2; j++)
                 {
-                    if( (pattern[j-1] == '?') || 
-                        (i-1 < str.Length && str[i-1] == pattern[j-1])) {
+                    if( (pattern[j-1] == '?') || (i-1 < str.Length && str[i-1] == pattern[j-1]) ) {
+
                         T[i, j] = T[i-1, j-1];
                     }
-                    else
+                    else if(pattern[j-1] == '*')
+                    {
+                        T[i, j] = T[i-1, j] /* left */ || T[i, j-1] /* or above */ ;
+                    }
+                    else if(pattern[j-1] == '+')
                     {
                         T[i, j] = T[i-1, j] /* left */ || T[i, j-1] /* or above */ ;
                     }
                 }
             }
-            var r = T[str.Length, dim2-1];
-            return r;
+            return T[str.Length, dim2-1];
         }
     }
 }
