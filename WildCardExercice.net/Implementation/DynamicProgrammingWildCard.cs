@@ -26,6 +26,18 @@
         2   b   F   F   T   F
         3   c   F   F   F   T
 
+    string     :"abcd"
+    pattern    :"a+bcd" // Should not match
+
+            Pattern
+                0   1   2   3   4   5
+                    a   +   b   c   d
+        ----------------------------------
+        0       T   F   F   F   F   F
+        1   a   F   T   F   F   F   F
+        2   b   F   F   T   F   F   F
+        3   c   F   F   F   F   F   F
+        4   d   F   F   F   F   F   F
 
 
      string     :"xaylmz"
@@ -78,7 +90,7 @@
             bool[,] T   = new bool[dim1, dim2];
             T[0, 0]     = true;
 
-            if(pattern[0] == '*')
+            if(pattern.Length > 0 && (pattern[0] == '*' || pattern[0] == '+'))
             {
                 T[0, 1] = true;
             }

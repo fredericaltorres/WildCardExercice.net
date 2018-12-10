@@ -4,16 +4,19 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace WildCardExercice.net
 {
     [TestClass]
-    public class WildCardUnitTests
+    public class RecursiveWildCard_UnitTests
     {
-        //IWildCard w = new RecursiveWildCard();
-        IWildCard w = new DynamicProgrammingWildCard();
+        /// <summary>
+        /// Find a way to re factor
+        /// </summary>
+        IWildCard w = new RecursiveWildCard();
+        //IWildCard w = new DynamicProgrammingWildCard();
 
         [TestMethod]
         public void IsMatch_JustStringExpression()
         {
-            //Assert.IsTrue (w.IsMatch("", ""));
-            //Assert.IsFalse(w.IsMatch("", "a"));
+            Assert.IsTrue (w.IsMatch("", ""));
+            Assert.IsFalse(w.IsMatch("", "a"));
 
             Assert.IsTrue (w.IsMatch("a", "a"));
             Assert.IsFalse(w.IsMatch("a", "z"));

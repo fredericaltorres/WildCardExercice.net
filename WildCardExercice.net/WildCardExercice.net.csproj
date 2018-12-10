@@ -50,7 +50,8 @@
   <ItemGroup>
     <Compile Include="Implementation\DynamicProgrammingWildCard.cs" />
     <Compile Include="Interface\IWildCard.cs" />
-    <Compile Include="UnitTests\WildCard.UnitTests.cs" />
+    <Compile Include="UnitTests\DynamicProgrammingWildCard.UnitTests.cs" />
+    <Compile Include="UnitTests\RecursiveWildCard.UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\RecursiveWildCard.cs" />
   </ItemGroup>
