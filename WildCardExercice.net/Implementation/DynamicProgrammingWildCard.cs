@@ -73,15 +73,15 @@
     /// Wildcard implementation using dynamic programming
     /// Using dynamic programming: https://www.youtube.com/watch?v=3ZDZ-N0EPV0
     /// </summary>
-    public class DynamicProgrammingWildCard : IWildCard
+    public class DynamicProgrammingWildCard : WildCardBase, IWildCard
     {
         public bool IsMatch(string s, string pp)
         {
             var p = pp;
-            while(p.Contains("**")) // Replace ** with *
-                p = p.Replace("**", "*");
-            while(p.Contains("++")) // Replace ++ with +
-                p = p.Replace("++", "+");
+            while(p.Contains(WILDCARD_ANY_CHAR_ZERO_OR_MORE_TWICE)) // Replace ** with *
+                p = p.Replace(WILDCARD_ANY_CHAR_ZERO_OR_MORE_TWICE, WILDCARD_ANY_CHAR_ZERO_OR_MORE.ToString());
+            while(p.Contains(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE)) // Replace ** with *
+                p = p.Replace(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE, WILDCARD_ANY_CHAR_ONE_OR_MORE.ToString());
 
             var str     = s.ToCharArray();
             var pattern = p.ToCharArray();
@@ -90,7 +90,7 @@
             bool[,] T   = new bool[dim1, dim2];
             T[0, 0]     = true;
 
-            if(pattern.Length > 0 && (pattern[0] == '*' || pattern[0] == '+'))
+            if(pattern.Length > 0 && (pattern[0] == WILDCARD_ANY_CHAR_ZERO_OR_MORE || pattern[0] == WILDCARD_ANY_CHAR_ONE_OR_MORE))
             {
                 T[0, 1] = true;
             }
@@ -103,11 +103,11 @@
 
                         T[i, j] = T[i-1, j-1];
                     }
-                    else if(pattern[j-1] == '*')
+                    else if(pattern[j-1] == WILDCARD_ANY_CHAR_ZERO_OR_MORE)
                     {
                         T[i, j] = T[i-1, j] /* left */ || T[i, j-1] /* or above */ ;
                     }
-                    else if(pattern[j-1] == '+')
+                    else if(pattern[j-1] == WILDCARD_ANY_CHAR_ONE_OR_MORE)
                     {
                         T[i, j] = T[i-1, j] /* left */ || T[i, j-1] /* or above */ ;
                     }
