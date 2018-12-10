@@ -38,6 +38,10 @@
     {
         public bool IsMatch(string s, string p)
         {
+            //if(string.IsNullOrEmpty(s) && string.IsNullOrEmpty(p))
+            //    return true;
+            //if(string.IsNullOrEmpty(s) && !string.IsNullOrEmpty(p))
+            //    return false;
             var str = s.ToCharArray();
             var pattern = p.ToCharArray();
             var writeIndex = 0;
@@ -62,14 +66,16 @@
             //}
 
             int dim2 = pattern.Length+1;
-            bool[,] T = new bool[str.Length+1, dim2];
+            int dim1 = str.Length+1;
+            bool[,] T = new bool[dim1, dim2];
             T[0, 0] = true;
 
-            for(var i = 0; i < T.Length; i++)
+            for(var i = 1; i < dim1; i++)
             {
-                for(var j = 0; j < dim2; j++)
+                for(var j = 1; j < dim2; j++)
                 {
-                    if(pattern[j-1] == '?' || str[i-1] == pattern[j-1]) {
+                    if( (pattern[j-1] == '?') || 
+                        (i-1 < str.Length && str[i-1] == pattern[j-1])) {
                         T[i, j] = T[i-1, j-1];
                     }
                     else
@@ -78,7 +84,7 @@
                     }
                 }
             }
-            var r = T[str.Length+1, dim2];
+            var r = T[str.Length, dim2-1];
             return r;
         }
     }
