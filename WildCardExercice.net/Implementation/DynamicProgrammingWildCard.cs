@@ -90,9 +90,10 @@
             string p         = this.GetRidOfDuplicateOperator(pp);
             var str          = s.ToCharArray();
             var pattern      = p.ToCharArray();
-            int dim2         = pattern.Length + 1;
-            int dim1         = str.Length + 1;
-            bool[,] matrix   = new bool[dim1, dim2];
+            int maxDim1      = str.Length + 1;
+            int maxDim2      = pattern.Length + 1;
+            
+            bool[,] matrix   = new bool[maxDim1, maxDim2];
             matrix[0, 0]     = true;
 
             if (pattern.Length > 0 && (pattern[0] == WILDCARD_ANY_CHAR_ZERO_OR_MORE || pattern[0] == WILDCARD_ANY_CHAR_ONE_OR_MORE))
@@ -100,25 +101,29 @@
                 matrix[0, 1] = true;
             }
 
-            for (var i = 1; i < dim1; i++)
+            for (var i = 1; i < maxDim1; i++)
             {
-                for (var j = 1; j < dim2; j++)
+                for (var j = 1; j < maxDim2; j++)
                 {
+                    // Match any char with ? or direct char match
                     if ((pattern[j - 1] == WILDCARD_ANY_CHAR) || (i - 1 < str.Length && str[i - 1] == pattern[j - 1]))
                     {
                         matrix[i, j] = matrix[i - 1, j - 1];
                     }
+                    // if pattern is * then use result from left cell or above
                     else if (pattern[j - 1] == WILDCARD_ANY_CHAR_ZERO_OR_MORE)
                     {
                         matrix[i, j] = matrix[i - 1, j] /* left */ || matrix[i, j - 1] /* or above */ ;
                     }
+                    // if pattern is + then use result from left cell or above
+                    // support of + is not working
                     else if (pattern[j - 1] == WILDCARD_ANY_CHAR_ONE_OR_MORE)
                     {
                         matrix[i, j] = matrix[i - 1, j] /* left */ || matrix[i, j - 1] /* or above */ ;
                     }
                 }
             }
-            return matrix[str.Length, dim2 - 1];
+            return matrix[str.Length, maxDim2 - 1];
         }
 
         private string GetRidOfDuplicateOperator(string pp)
