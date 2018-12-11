@@ -8,8 +8,7 @@ namespace WildCardExercice.net
     {
         /// <summary>
         /// Find a way to re factor
-        /// </summary>
-        //IWildCard w = new RecursiveWildCard();
+        /// </summary>        
         IWildCard w = new DynamicProgrammingWildCard();
 
         [TestMethod]

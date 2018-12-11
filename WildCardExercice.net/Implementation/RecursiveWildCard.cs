@@ -2,7 +2,6 @@
 
 namespace WildCardExercice.net
 {
-
     public class WildCardBase 
     {
         protected const char WILDCARD_ANY_CHAR_ZERO_OR_MORE = '*';
@@ -17,13 +16,16 @@ namespace WildCardExercice.net
     /// </summary>
     public class RecursiveWildCard : WildCardBase, IWildCard
     {
+        public static int MaxRecursionLevel = 0;
 
         public bool IsMatch(String s, String p)
         {
-            return helper(s, p, 0, 0);
+            return helper(s, p, 0, 0, 0);
         }
-        bool helper(String s, String pattern, int sX, int patternX)
+        bool helper(String s, String pattern, int sX, int patternX, int recursionLevel)
         {
+            MaxRecursionLevel = Math.Max(MaxRecursionLevel, recursionLevel);
+
             if(patternX == pattern.Length)
                 return sX == s.Length;
 
@@ -44,16 +46,16 @@ namespace WildCardExercice.net
 
                 while(sX < s.Length)
                 {
-                    if(helper(s, pattern, sX, patternX)) 
+                    if(helper(s, pattern, sX, patternX, recursionLevel+1)) 
                         return true;
                     sX += 1; // If we failed matching, skip one char try to skip two...
                 }
-                return helper(s, pattern, sX, patternX); // Do not forget the final evaluation in case we reach the end of the string
+                return helper(s, pattern, sX, patternX, recursionLevel+1); // Do not forget the final evaluation in case we reach the end of the string
             }
             else if(sX < s.Length) {
                 // Direct char to char or char to ? match
                 if( (s[sX] == pattern[patternX]) || (pattern[patternX] == WILDCARD_ANY_CHAR) )
-                    return helper(s, pattern, sX+1, patternX+1); // Move to next char
+                    return helper(s, pattern, sX+1, patternX+1, recursionLevel); // Move to next char
             }
             return false;
         }

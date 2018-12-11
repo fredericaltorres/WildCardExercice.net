@@ -1,7 +1,8 @@
 ﻿namespace WildCardExercice.net
 {
     /*
-     
+
+    Different example using dynamic programming
 
     string     :"ab"
     pattern    :"az"
@@ -14,6 +15,7 @@
         1   a   F   T   F    [1,1] is T
         2   b   F   F   F
 
+
     string     :"abc"
     pattern    :"ab+"
 
@@ -25,6 +27,7 @@
         1   a   F   T   F   F
         2   b   F   F   T   F
         3   c   F   F   F   T
+
 
     string     :"abcd"
     pattern    :"a+bcd" // Should not match
@@ -66,54 +69,66 @@
     - Space O(m x n)
     - Time O(m x n)
 
-            leetcode.com/problems/wildcard-matching
+    Wildcard dynamic programming
+        https://duckduckgo.com/?q=wildcard+dynamic+programming&atb=v140-7ap&ia=videos
+            
+    A possible solution for the +
+        https://www.geeksforgeeks.org/wildcard-pattern-matching-three-symbols/
 
     */
     /// <summary>
     /// Wildcard implementation using dynamic programming
     /// Using dynamic programming: https://www.youtube.com/watch?v=3ZDZ-N0EPV0
+    /// 
+    /// THE SUPPORT OF '+' IS NOT CORRECTLY WORKING
+    /// 
     /// </summary>
     public class DynamicProgrammingWildCard : WildCardBase, IWildCard
     {
         public bool IsMatch(string s, string pp)
         {
-            var p = pp;
-            while(p.Contains(WILDCARD_ANY_CHAR_ZERO_OR_MORE_TWICE)) // Replace ** with *
-                p = p.Replace(WILDCARD_ANY_CHAR_ZERO_OR_MORE_TWICE, WILDCARD_ANY_CHAR_ZERO_OR_MORE.ToString());
-            while(p.Contains(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE)) // Replace ** with *
-                p = p.Replace(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE, WILDCARD_ANY_CHAR_ONE_OR_MORE.ToString());
+            string p         = this.GetRidOfDuplicateOperator(pp);
+            var str          = s.ToCharArray();
+            var pattern      = p.ToCharArray();
+            int dim2         = pattern.Length + 1;
+            int dim1         = str.Length + 1;
+            bool[,] matrix   = new bool[dim1, dim2];
+            matrix[0, 0]     = true;
 
-            var str     = s.ToCharArray();
-            var pattern = p.ToCharArray();
-            int dim2    = pattern.Length+1;
-            int dim1    = str.Length+1;
-            bool[,] T   = new bool[dim1, dim2];
-            T[0, 0]     = true;
-
-            if(pattern.Length > 0 && (pattern[0] == WILDCARD_ANY_CHAR_ZERO_OR_MORE || pattern[0] == WILDCARD_ANY_CHAR_ONE_OR_MORE))
+            if (pattern.Length > 0 && (pattern[0] == WILDCARD_ANY_CHAR_ZERO_OR_MORE || pattern[0] == WILDCARD_ANY_CHAR_ONE_OR_MORE))
             {
-                T[0, 1] = true;
+                matrix[0, 1] = true;
             }
 
-            for(var i = 1; i < dim1; i++)
+            for (var i = 1; i < dim1; i++)
             {
-                for(var j = 1; j < dim2; j++)
+                for (var j = 1; j < dim2; j++)
                 {
-                    if( (pattern[j-1] == '?') || (i-1 < str.Length && str[i-1] == pattern[j-1]) ) {
-
-                        T[i, j] = T[i-1, j-1];
-                    }
-                    else if(pattern[j-1] == WILDCARD_ANY_CHAR_ZERO_OR_MORE)
+                    if ((pattern[j - 1] == '?') || (i - 1 < str.Length && str[i - 1] == pattern[j - 1]))
                     {
-                        T[i, j] = T[i-1, j] /* left */ || T[i, j-1] /* or above */ ;
+                        matrix[i, j] = matrix[i - 1, j - 1];
                     }
-                    else if(pattern[j-1] == WILDCARD_ANY_CHAR_ONE_OR_MORE)
+                    else if (pattern[j - 1] == WILDCARD_ANY_CHAR_ZERO_OR_MORE)
                     {
-                        T[i, j] = T[i-1, j] /* left */ || T[i, j-1] /* or above */ ;
+                        matrix[i, j] = matrix[i - 1, j] /* left */ || matrix[i, j - 1] /* or above */ ;
+                    }
+                    else if (pattern[j - 1] == WILDCARD_ANY_CHAR_ONE_OR_MORE)
+                    {
+                        matrix[i, j] = matrix[i - 1, j] /* left */ || matrix[i, j - 1] /* or above */ ;
                     }
                 }
             }
-            return T[str.Length, dim2-1];
+            return matrix[str.Length, dim2 - 1];
+        }
+
+        private string GetRidOfDuplicateOperator(string pp)
+        {
+            var p = pp;
+            while (p.Contains(WILDCARD_ANY_CHAR_ZERO_OR_MORE_TWICE)) // Replace ** with *
+                p = p.Replace(WILDCARD_ANY_CHAR_ZERO_OR_MORE_TWICE, WILDCARD_ANY_CHAR_ZERO_OR_MORE.ToString());
+            while (p.Contains(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE)) // Replace ** with *
+                p = p.Replace(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE, WILDCARD_ANY_CHAR_ONE_OR_MORE.ToString());
+            return p;
         }
     }
 }

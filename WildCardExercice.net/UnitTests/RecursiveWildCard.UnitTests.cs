@@ -10,7 +10,6 @@ namespace WildCardExercice.net
         /// Find a way to re factor
         /// </summary>
         IWildCard w = new RecursiveWildCard();
-        //IWildCard w = new DynamicProgrammingWildCard();
 
         [TestMethod]
         public void IsMatch_JustStringExpression()
