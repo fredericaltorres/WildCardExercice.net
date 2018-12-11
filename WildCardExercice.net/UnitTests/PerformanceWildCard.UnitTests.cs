@@ -13,9 +13,9 @@ namespace WildCardExercice.net
         public void PerformanceWithDynamicProgramming()
         {
             var sw = Stopwatch.StartNew();
-            IWildCard dpImpl = new DynamicProgrammingWildCard();
+            IWildCard impl = new DynamicProgrammingWildCard();
             for(var i = 0; i < MAX_LOOP; i++)
-                PerformanceWithImplementation(dpImpl);
+                PerformanceWithImplementation(impl);
             sw.Stop();
             var elapsedMilliseconds = sw.ElapsedMilliseconds;
         }
@@ -24,9 +24,9 @@ namespace WildCardExercice.net
         public void PerformanceWithRecursion()
         {
             var sw = Stopwatch.StartNew();
-            var rImpl = new RecursiveWildCard();
+            IWildCard impl = new RecursiveWildCard();
             for(var i = 0; i < MAX_LOOP; i++)
-                PerformanceWithImplementation(rImpl);
+                PerformanceWithImplementation(impl);
             Debug.WriteLine($"MaxRecursionLevel:{RecursiveWildCard.MaxRecursionLevel}");
             sw.Stop();
             var elapsedMilliseconds = sw.ElapsedMilliseconds;
@@ -35,18 +35,31 @@ namespace WildCardExercice.net
         public void PerformanceWithImplementation(IWildCard w)
         {
             var text     = "abcdefghi-abcdefghi-abcdefghi";
-            var patterns = new List<string>() {
+            var successfullPatterns = new List<string>() {
 
                 "abcdefghi-abcdefghi-abcdefghi",
                 "a*c*e*g*i-a*c*e*g*i-a*c*e*g*i",
                 "a?c?e?g?i-a?c?e?g?i-a?c?e?g?i",
                 "a*c?e*g?i-a*c?e*g?i-a*c?e*g?i",
-                "*-***",
+                "*-*-*",
                 "*?-*?-*?",
                 "*??-*??-*??",
             };
-            patterns.ForEach((pattern) => {
+            successfullPatterns.ForEach((pattern) => {
                 Assert.IsTrue(w.IsMatch(text, pattern));
+            });
+            var failedPatterns = new List<string>() {
+
+                "abcdefghi-abcdefghi-abcdefgh",
+                "a*c*e*g*i-aZc*e*g*i-a*c*e*g*i",
+                "a?c?e?g?i-a?c?e?g?Z-a?c?e?g?i",
+                "a*c?e*g?i-a*c?e*g?i-a*c?e*g?Z",
+                "*-*Z*",
+                "*?-*?Z*?",
+                "*??-*??Z*??",
+            };
+            failedPatterns.ForEach((pattern) => {
+                Assert.IsFalse(w.IsMatch(text, pattern));
             });
         }
     }
