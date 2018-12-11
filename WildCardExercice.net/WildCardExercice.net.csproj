@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\DynamicProgrammingWildCard.cs" />
+    <Compile Include="Implementation\WildCardBase.cs" />
     <Compile Include="Interface\IWildCard.cs" />
     <Compile Include="UnitTests\PerformanceWildCard.UnitTests.cs" />
     <Compile Include="UnitTests\DynamicProgrammingWildCard.UnitTests.cs" />
