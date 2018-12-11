@@ -27,7 +27,8 @@ namespace WildCardExercice.net
                     sX += 1;
 
                 // Skip the * or any *** or + or any +++
-                while ( patternX < pattern.Length && (pattern[patternX] == WILDCARD_ANY_CHAR_ZERO_OR_MORE || pattern[patternX] == WILDCARD_ANY_CHAR_ONE_OR_MORE) )
+                while ( patternX < pattern.Length && 
+                        (pattern[patternX] == WILDCARD_ANY_CHAR_ZERO_OR_MORE || pattern[patternX] == WILDCARD_ANY_CHAR_ONE_OR_MORE) )
                 {
                     patternX += 1;
                 }
