@@ -2,7 +2,7 @@
 {
     /*
 
-    Different example using dynamic programming
+    Different examples using dynamic programming
 
     string     :"ab"
     pattern    :"az"
@@ -104,7 +104,7 @@
             {
                 for (var j = 1; j < dim2; j++)
                 {
-                    if ((pattern[j - 1] == '?') || (i - 1 < str.Length && str[i - 1] == pattern[j - 1]))
+                    if ((pattern[j - 1] == WILDCARD_ANY_CHAR) || (i - 1 < str.Length && str[i - 1] == pattern[j - 1]))
                     {
                         matrix[i, j] = matrix[i - 1, j - 1];
                     }
@@ -126,7 +126,7 @@
             var p = pp;
             while (p.Contains(WILDCARD_ANY_CHAR_ZERO_OR_MORE_TWICE)) // Replace ** with *
                 p = p.Replace(WILDCARD_ANY_CHAR_ZERO_OR_MORE_TWICE, WILDCARD_ANY_CHAR_ZERO_OR_MORE.ToString());
-            while (p.Contains(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE)) // Replace ** with *
+            while (p.Contains(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE)) // Replace ++ with +
                 p = p.Replace(WILDCARD_ANY_CHAR_ONE_OR_MORE_TWICE, WILDCARD_ANY_CHAR_ONE_OR_MORE.ToString());
             return p;
         }
