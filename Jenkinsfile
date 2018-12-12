@@ -8,6 +8,11 @@ pipeline {
 
 	agent any
 
+    options {
+        buildDiscarder(logRotator(daysToKeepStr: '2'))
+        durabilityHint('MAX_SURVIVABILITY')
+    }	
+
     environment {
 
 		CHANNEL = 'Fred Channel'
