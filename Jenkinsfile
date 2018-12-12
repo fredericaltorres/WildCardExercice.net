@@ -8,28 +8,28 @@ pipeline {
 
 	agent any
 
-    options {
-        buildDiscarder(logRotator(daysToKeepStr: '2'))
-        durabilityHint('MAX_SURVIVABILITY')
-    }	
+	options {
+		buildDiscarder(logRotator(daysToKeepStr: '2'))
+		durabilityHint('MAX_SURVIVABILITY')
+	}	
 
-    environment {
+	environment {
 
 		CHANNEL = 'Fred Channel'
-    }
+	}
 
 	parameters {
 
-        booleanParam(name: BuildFastMode,        defaultValue: false , description: 'BuildFastMode')
+		booleanParam(name: BuildFastMode,        defaultValue: false , description: 'BuildFastMode')
 		booleanParam(name: UpdateJenkinsUI,      defaultValue: false , description: 'Refresh Jenkins pipeline job UI')
-    }
+	}
 
-    stages {
+	stages {
 
-        stage ('Setup environment') {
+		stage ('Setup environment') {
 			steps {
 				script {
-                    echo "Code source branch is ${SourceBranch}"
+					echo "Code source branch is ${SourceBranch}"
 					dumpEnvironmentVariables()
 					dumpParameters()
 				}
@@ -38,62 +38,59 @@ pipeline {
 
 		stage('Build .NET Code') {
 			steps {
-                script {
-                    echo "Build .NET Code . . ."
+				script {
+					echo "Build .NET Code . . ."
 					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -Branch '${SourceBranch}' ")
-                }
+				}
 			}
 		}
 
-        stage('Update jenkins UI') {
+		stage('Update jenkins UI') {
 			when {
 				expression { params.UpdateJenkinsUI == true }
 			}
 			steps {
-                echo "Refresh Jenkins pipeline job UI"
+				echo "Refresh Jenkins pipeline job UI"
 			}
 		}
-    }
-    post {
-        always {
-            script {
+	}
+	post {
+		always {
+			script {
 				currentBuild.setKeepLog(true)
-            }
-        }
-        success {
-            script {
+			}
+		}
+		success {
+			script {
 				echo " SUCCESS "
-            }
-        }
-        aborted {
-            script {
+			}
+		}
+		aborted {
+			script {
 				echo " ABORTING "
-            }
-        }
-        failure {
-            script {
+			}
+		}
+		failure {
+			script {
 				echo " FAILURE "
-            }
-        }
+			}
+		}
 		cleanup {
-            cleanWs()
-        }
-    }
+			cleanWs()
+		}
+	}
 }
 
-
 def dumpEnvironmentVariables() {
-    echo '============================ Environment Variables ============================='
+    echo "*** Environment Variables ***"
     env.each {
 		key, value -> echo "${key}: ${value}"
-	}
-    echo '========================== End Environment Variables ==========================='
+	}    
 }
 
 def dumpParameters() {
-    echo '================================= Parameters ==================================='
+    echo "*** Parameters ***"
 	params.each {
 		key, value -> echo "${key}: ${value}"
 	}
-    echo '=============================== End Parameters ================================='
 }
