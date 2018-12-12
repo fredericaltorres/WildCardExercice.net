@@ -6,6 +6,8 @@ def SourceBranch = "master"
 
 pipeline {
 
+	agent any
+
     environment {
 
 		CHANNEL = 'Fred Channel'
