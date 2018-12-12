@@ -37,9 +37,6 @@ pipeline {
 		}
 
 		stage('Build .NET Code') {
-			when {
-                expression { true }
-			}
 			steps {
                 script {
                     echo "Build .NET Code . . ."
