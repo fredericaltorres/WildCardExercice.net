@@ -59,17 +59,17 @@ pipeline {
         }
         success {
             script {
-				// Success
+				echo " SUCCESS "
             }
         }
         aborted {
             script {
-				// Abort
+				echo " ABORTING "
             }
         }
         failure {
             script {
-				// Failure
+				echo " FAILURE "
             }
         }
 		cleanup {
