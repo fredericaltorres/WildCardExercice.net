@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Build\build.ps1" />
     <Compile Include="Implementation\DynamicProgrammingWildCard.cs" />
     <Compile Include="Implementation\WildCardBase.cs" />
     <Compile Include="Interface\IWildCard.cs" />
