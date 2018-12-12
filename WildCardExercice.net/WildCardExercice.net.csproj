@@ -58,6 +58,9 @@
     <Compile Include="Implementation\RecursiveWildCard.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Jenkinsfile">
+      <Link>Jenkinsfile</Link>
+    </None>
     <None Include="..\README.md">
       <Link>README.md</Link>
     </None>
