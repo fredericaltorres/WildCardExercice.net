@@ -43,7 +43,7 @@ pipeline {
 			steps {
                 script {
                     echo "Build .NET Code . . ."
-					powershell(script: ".\\build\\build.ps1 -Branch '${SourceBranch}' ")
+					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -Branch '${SourceBranch}' ")
                 }
 			}
 		}
