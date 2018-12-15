@@ -82,7 +82,7 @@ pipeline {
 			}
 		}
 		cleanup {
-			cleanWs()
+			// cleanWs()
 		}
 	}
 }
