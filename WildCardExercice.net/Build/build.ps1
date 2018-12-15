@@ -27,7 +27,7 @@ $ErrorActionPreference 		= "Stop"
 Write-Output "`nINFO: Building branch $Branch"
 Write-Output "`nINFO: DEVENV_EXE:$DEVENV_EXE"
 Write-Output "`nINFO: VS_TEST_CONSOLE:$VS_TEST_CONSOLE"
-dir
+dir /b/s
 
 $cmd = " ~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION ".Replace("~", "`"")
 Write-Output "About to execute build Command:$cmd"
@@ -36,6 +36,7 @@ if ($LASTEXITCODE -ne 0) {
 	Write-Error "ERROR: Build Error"
 	exit 1
 }
+dir /b/s
 
 
 
