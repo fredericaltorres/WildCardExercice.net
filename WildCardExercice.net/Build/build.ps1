@@ -30,11 +30,9 @@ Write-Output "`nINFO: Building branch $Branch"
 Write-Output "`nINFO: DEVENV_EXE:$DEVENV_EXE"
 Write-Output "`nINFO: VS_TEST_CONSOLE:$VS_TEST_CONSOLE"
 
-cmd.exe /c dir /b/s
-
-
 function ExecCommandLine($cmd0) {
 	$cmd = $cmd0.Replace("~", "`"")
+	Write-Output ""
 	Write-Output "About to execute build Command:$cmd"
 	iex "& $cmd"
 	if ($LASTEXITCODE -ne 0) {
@@ -45,24 +43,6 @@ function ExecCommandLine($cmd0) {
 
 ExecCommandLine "~$NUGET~ restore ~$SOLUTION~ "
 ExecCommandLine "~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION "
-
-<#
-$cmd = " ~$NUGET~ restore ~$SOLUTION~ ".Replace("~", "`"")
-Write-Output "About to execute build Command:$cmd"
-iex "& $cmd"
-
-$cmd = " ~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION ".Replace("~", "`"")
-Write-Output "About to execute build Command:$cmd"
-iex "& $cmd"
-if ($LASTEXITCODE -ne 0) {
-	Write-Error "ERROR: Build Error"
-	exit 1
-}
-#>
-
-cmd.exe /c dir /b/s
-
-
-
+ExecCommandLine "~$VS_TEST_CONSOLE~ ~WildCardExercice.net\bin\$CONFIGURATION\WildCardExercice.net.dll~ "
 
 
