@@ -124,7 +124,7 @@ namespace WildCardExercice.net
         {
             Assert.IsFalse(w.IsMatch("abcd", "abcd+"));
             Assert.IsFalse(w.IsMatch("abcd", "+abcd"));
-        }
+        } 
 
         //[TestMethod]
         public void IsMatch_PlusMatchingZeroCharMustFail_case_2()
