@@ -17,6 +17,9 @@ namespace WildCardExercice.net
         {
             MaxRecursionLevel = Math.Max(MaxRecursionLevel, recursionLevel);
 
+            // If we reached the end of the pattern and at the same time
+            // we also reached the end of the string, then we are done, 
+            // the string is a match
             if(patternX == pattern.Length)
                 return sX == s.Length;
 
@@ -35,7 +38,7 @@ namespace WildCardExercice.net
 
                 while(sX < s.Length)
                 {
-                    if(helper(s, pattern, sX, patternX, recursionLevel+1)) 
+                    if(helper(s, pattern, sX, patternX, recursionLevel+1))
                         return true;
                     sX += 1; // If we failed matching, skip one char try to skip two...
                 }
