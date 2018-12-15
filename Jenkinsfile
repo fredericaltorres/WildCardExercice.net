@@ -82,6 +82,7 @@ pipeline {
 			}
 		}
 		cleanup {
+			echo "No clean up"
 			// cleanWs()
 		}
 	}
