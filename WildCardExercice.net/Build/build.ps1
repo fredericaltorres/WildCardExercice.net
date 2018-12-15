@@ -30,7 +30,12 @@ Write-Output "`nINFO: VS_TEST_CONSOLE:$VS_TEST_CONSOLE"
 dir
 
 $cmd = " ~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION ".Replace("~", "`"")
-Write-Output "Build Command:$cmd"
+Write-Output "About to execute build Command:$cmd"
+& $cmd
+if ($LASTEXITCODE -ne 0) {
+	Write-Error "ERROR: Build Error"
+	exit 1
+}
 
 
 
