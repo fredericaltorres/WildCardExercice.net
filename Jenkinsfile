@@ -46,7 +46,8 @@ pipeline {
 		stage('Build .NET Code') {
 			steps {
 				script {
-					powershell(script: "${env.BUILD_SCRIPT} -ACTION build -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
+					//powershell(script: "${env.BUILD_SCRIPT} -ACTION build -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
+					powershell(script: getBuildCommandLine('build', 'WildCardExercice.net.sln'))
 				}
 			}
 		}
@@ -119,4 +120,8 @@ def dumpParameters() {
 	params.each {
 		key, value -> echo "${key}: ${value}"
 	}
+}
+
+def getBuildCommandLine(action, solution) {
+	return "${env.BUILD_SCRIPT} -ACTION ${action} -SOLUTION '${solution}' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'"
 }
