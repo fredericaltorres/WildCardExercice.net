@@ -43,9 +43,10 @@ function ExecCommandLine($cmd0, $message) {
 	}
 }
 
-ExecCommandLine "~$NUGET~ restore ~$SOLUTION~ ", "Restoring packages"
-ExecCommandLine "~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION ", "Building solution"
-ExecCommandLine "~$VS_TEST_CONSOLE~ ~WildCardExercice.net\bin\$CONFIGURATION\WildCardExercice.net.dll~ ", "Running unit tests"
+ExecCommandLine "~$NUGET~ restore ~$SOLUTION~ " "Restoring packages"
+ExecCommandLine "~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION " "Building solution"
+ExecCommandLine "~$VS_TEST_CONSOLE~ ~WildCardExercice.net\bin\$CONFIGURATION\WildCardExercice.net.dll~ " "Running unit tests"
+
 
 
 
