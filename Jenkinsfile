@@ -90,7 +90,7 @@ def GetEnvironmentVariablesAsPowerShellCommandLine() {
     echo "*** GetEnvironmentVariablesAsPowerShellCommandLine ***"
 	def r = ""
     env.each {
-		r = r + "-${key}='${value}'"
+		key, value -> r = r + "-${key}='${value}'"
 	}
 	return r
 }
