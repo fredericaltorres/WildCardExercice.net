@@ -43,9 +43,9 @@ pipeline {
 		stage('Build .NET Code') {
 			steps {
 				script {
-					echo "Build .NET Code . . . DEVENV_EXE:${env.DEVENV_EXE}"
+					echo "Build .NET Code . . ."
 					echo "GetEnvironmentVariablesAsPowerShellCommandLine: ${GetEnvironmentVariablesAsPowerShellCommandLine()}"
-					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -Branch '${SourceBranch}' ")
+					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
 				}
 			}
 		}
@@ -86,7 +86,7 @@ pipeline {
 	}
 }
 
-
+// Does not work, do not see new variables
 def GetEnvironmentVariablesAsPowerShellCommandLine() {
     echo "*** GetEnvironmentVariablesAsPowerShellCommandLine ***"
 	def r = ""
