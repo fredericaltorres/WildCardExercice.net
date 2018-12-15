@@ -44,8 +44,8 @@ pipeline {
 			steps {
 				script {
 					echo "Build .NET Code . . ."
-					echo "GetEnvironmentVariablesAsPowerShellCommandLine: ${GetEnvironmentVariablesAsPowerShellCommandLine()}"
-					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
+					// echo "GetEnvironmentVariablesAsPowerShellCommandLine: ${GetEnvironmentVariablesAsPowerShellCommandLine()}"
+					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION 'Release' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
 				}
 			}
 		}
