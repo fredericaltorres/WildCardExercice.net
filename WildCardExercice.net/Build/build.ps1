@@ -30,10 +30,12 @@ Write-Output "`nINFO: Building branch $Branch"
 Write-Output "`nINFO: DEVENV_EXE:$DEVENV_EXE"
 Write-Output "`nINFO: VS_TEST_CONSOLE:$VS_TEST_CONSOLE"
 
-function ExecCommandLine($cmd0) {
+function ExecCommandLine($cmd0, $message) {
 	$cmd = $cmd0.Replace("~", "`"")
-	Write-Output ""
-	Write-Output "About to execute build Command:$cmd"
+	Write-Output " * * * * * * * * * * * * * * * * * * * * * * * *"
+	Write-Output " * $message"
+	Write-Output " * * * * * * * * * * * * * * * * * * * * * * * *"
+	Write-Output "Command Line:$cmd"
 	iex "& $cmd"
 	if ($LASTEXITCODE -ne 0) {
 		Write-Error "ERROR: Build Error, cmd:$cmd0"
@@ -41,8 +43,9 @@ function ExecCommandLine($cmd0) {
 	}
 }
 
-ExecCommandLine "~$NUGET~ restore ~$SOLUTION~ "
-ExecCommandLine "~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION "
-ExecCommandLine "~$VS_TEST_CONSOLE~ ~WildCardExercice.net\bin\$CONFIGURATION\WildCardExercice.net.dll~ "
+ExecCommandLine "~$NUGET~ restore ~$SOLUTION~ ", "Restoring packages"
+ExecCommandLine "~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION ", "Building solution"
+ExecCommandLine "~$VS_TEST_CONSOLE~ ~WildCardExercice.net\bin\$CONFIGURATION\WildCardExercice.net.dll~ ", "Running unit tests"
+
 
 
