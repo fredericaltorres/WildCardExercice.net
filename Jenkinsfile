@@ -10,6 +10,7 @@ pipeline {
 	agent any
 
 	options {
+
 		buildDiscarder(logRotator(daysToKeepStr: '2'))
 		durabilityHint('MAX_SURVIVABILITY')
 	}
@@ -21,8 +22,8 @@ pipeline {
 		DEVENV_EXE = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\devenv.com"
 		VS_TEST_CONSOLE = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe"
 		BUILD_CONFIGURATION = "Release"
+		BUILD_SCRIPT = ".\\WildCardExercice.net\\build\\build.ps1"
 	}
-
 
 	parameters {
 
@@ -45,9 +46,7 @@ pipeline {
 		stage('Build .NET Code') {
 			steps {
 				script {
-					echo "Build .NET Code . . ."
-					// echo "GetEnvironmentVariablesAsPowerShellCommandLine: ${GetEnvironmentVariablesAsPowerShellCommandLine()}"
-					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -ACTION build -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
+					powershell(script: "${env.BUILD_SCRIPT} -ACTION build -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
 				}
 			}
 		}
@@ -55,8 +54,7 @@ pipeline {
 		stage('Run unit tests') {
 			steps {
 				script {
-					echo "Run unit tests . . ."
-					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -ACTION unittest -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
+					powershell(script: "${env.BUILD_SCRIPT} -ACTION unittest -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
 				}
 			}
 		}
