@@ -29,9 +29,10 @@ Write-Output "`nINFO: DEVENV_EXE:$DEVENV_EXE"
 Write-Output "`nINFO: VS_TEST_CONSOLE:$VS_TEST_CONSOLE"
 dir
 
-Write-Output "Build Command:$DEVENV_EXE $SOLUTION /build $CONFIGURATION"
+$cmd = ' "$DEVENV_EXE" "$SOLUTION" /build $CONFIGURATION '
+Write-Output "Build Command:$cmd"
 
-# $DEVENV_EXE $SOLUTION /build $CONFIGURATION
+
 
 
 

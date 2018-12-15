@@ -22,6 +22,7 @@ pipeline {
 		VS_TEST_CONSOLE = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe"
 	}
 
+
 	parameters {
 
 		booleanParam(name: BuildFastMode,        defaultValue: false , description: 'BuildFastMode')
