@@ -1,6 +1,7 @@
 #! /usr/bin/env groovy
 
 // Global Constants
+//* [How to execute groovy code](https://www.tutorialspoint.com/execute_groovy_online.php)
 
 def SourceBranch = "master"
 
@@ -90,7 +91,7 @@ def GetEnvironmentVariablesAsPowerShellCommandLine() {
     echo "*** GetEnvironmentVariablesAsPowerShellCommandLine ***"
 	def r = "ok"
     env.each {
-		key, value -> echo "${key}: ${value}"
+		key, value -> r += "-${key}: ${value}"
 	}
 	return r
 }
