@@ -43,7 +43,7 @@ pipeline {
 		stage('Build .NET Code') {
 			steps {
 				script {
-					echo "Build .NET Code . . ."
+					echo "Build .NET Code . . . DEVENV_EXE:${env.DEVENV_EXE}"
 					echo "GetEnvironmentVariablesAsPowerShellCommandLine: ${GetEnvironmentVariablesAsPowerShellCommandLine()}"
 					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -Branch '${SourceBranch}' ")
 				}
