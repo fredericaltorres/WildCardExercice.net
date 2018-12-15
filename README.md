@@ -1,5 +1,7 @@
 # WildCardExercice.net
 
+## Overview
+
 * 2 implementations of the wildcard filter in C# with unit tests (TDD)
 * Operators:
 	- '?' match one character
@@ -15,5 +17,11 @@ var match = new RecursiveWildCard().IsMatch("abcdef", "a?c*f"); // true
 var match = new RecursiveWildCard().IsMatch("abcdef", "a+bcdef"); // false
 
 var match = new DynamicProgrammingWildCard().IsMatch("abcdef", "a?c*f"); // true
+
+## Build
+
+* Jenkins pipeline using Powershell to build and run unit tests.
+
+
 
 ```
