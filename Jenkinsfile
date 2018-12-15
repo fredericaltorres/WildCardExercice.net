@@ -16,6 +16,9 @@ pipeline {
 	environment {
 
 		CHANNEL = 'Fred Channel'
+		JENKINS_WORKSPACE = "C:\Program Files (x86)\Jenkins\workspace"
+		DEVENV_EXE = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.com"
+		VS_TEST_CONSOLE = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
 	}
 
 	parameters {
@@ -40,6 +43,7 @@ pipeline {
 			steps {
 				script {
 					echo "Build .NET Code . . ."
+					echo "GetEnvironmentVariablesAsPowerShellCommandLine: ${GetEnvironmentVariablesAsPowerShellCommandLine()}"
 					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -Branch '${SourceBranch}' ")
 				}
 			}
@@ -80,6 +84,17 @@ pipeline {
 		}
 	}
 }
+
+
+def GetEnvironmentVariablesAsPowerShellCommandLine() {
+    echo "*** GetEnvironmentVariablesAsPowerShellCommandLine ***"
+	def r = ""
+    env.each {
+		r = r + "-${key}='${value}'"
+	}
+	return r
+}
+
 
 def dumpEnvironmentVariables() {
     echo "*** Environment Variables ***"
