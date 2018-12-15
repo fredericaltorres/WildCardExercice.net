@@ -32,8 +32,21 @@ Write-Output "`nINFO: VS_TEST_CONSOLE:$VS_TEST_CONSOLE"
 
 cmd.exe /c dir /b/s
 
-# c:\tools\nuget.exe restore WildCardExercice.net.sln
 
+function ExecCommandLine($cmd0) {
+	$cmd = $cmd0.Replace("~", "`"")
+	Write-Output "About to execute build Command:$cmd"
+	iex "& $cmd"
+	if ($LASTEXITCODE -ne 0) {
+		Write-Error "ERROR: Build Error, cmd:$cmd0"
+		exit 1
+	}
+}
+
+ExecCommandLine "~$NUGET~ restore ~$SOLUTION~ "
+ExecCommandLine "~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION "
+
+<#
 $cmd = " ~$NUGET~ restore ~$SOLUTION~ ".Replace("~", "`"")
 Write-Output "About to execute build Command:$cmd"
 iex "& $cmd"
@@ -45,6 +58,7 @@ if ($LASTEXITCODE -ne 0) {
 	Write-Error "ERROR: Build Error"
 	exit 1
 }
+#>
 
 cmd.exe /c dir /b/s
 
