@@ -9,7 +9,6 @@
 * The first implementation uses recursion, the second one uses dynamic programming.
 
 	- The dynamic programming implementation does not support operator '+'.
-	- I have to figure it out
 
 ```cs
 var match = new RecursiveWildCard().IsMatch("abcdef", "a?c*f"); // true
@@ -17,4 +16,4 @@ var match = new RecursiveWildCard().IsMatch("abcdef", "a+bcdef"); // false
 
 var match = new DynamicProgrammingWildCard().IsMatch("abcdef", "a?c*f"); // true
 
-```Jenkinsfile
+```

@@ -17,13 +17,15 @@ pipeline {
 
 	environment {
 
-		CHANNEL = 'Fred Channel'
-		SOURCE_BRANCH = "master"
-		JENKINS_WORKSPACE = "C:\\Program Files (x86)\\Jenkins\\workspace"
-		DEVENV_EXE = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\devenv.com"
-		VS_TEST_CONSOLE = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe"
-		BUILD_CONFIGURATION = "Release"
-		BUILD_SCRIPT = ".\\WildCardExercice.net\\build\\build.ps1"
+		JENKINS_WORKSPACE 		= "C:\\Program Files (x86)\\Jenkins\\workspace"
+		DEVENV_EXE 				= "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\devenv.com"
+		VS_TEST_CONSOLE 		= "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe"
+
+		SOURCE_BRANCH 			= "master"
+		
+		BUILD_CONFIGURATION 	= "Release"
+		BUILD_SCRIPT 			= ".\\WildCardExercice.net\\build\\build.ps1"
+		VS_SOLUTION_FILE		= "WildCardExercice.net.sln"
 	}
 
 	parameters {
@@ -47,8 +49,7 @@ pipeline {
 		stage('Build .NET Code') {
 			steps {
 				script {
-					//powershell(script: "${env.BUILD_SCRIPT} -ACTION build -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${env.SOURCE_BRANCH}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
-					powershell(script: getBuildCommandLine('build', 'WildCardExercice.net.sln'))
+					powershell(script: getBuildCommandLine('build', env.VS_SOLUTION_FILE))
 				}
 			}
 		}
@@ -56,7 +57,7 @@ pipeline {
 		stage('Run unit tests') {
 			steps {
 				script {
-					powershell(script: "${env.BUILD_SCRIPT} -ACTION unittest -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${env.SOURCE_BRANCH}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
+					powershell(script: getBuildCommandLine('unittest', env.VS_SOLUTION_FILE))
 				}
 			}
 		}
