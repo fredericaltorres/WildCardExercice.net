@@ -20,6 +20,9 @@ param (
 	[Parameter(Mandatory = $true)]
 	[string]$CONFIGURATION, # Release | Debug
 
+	[Parameter(Mandatory = $true)]
+	[string]$ACTION, # build, unittest
+
 	[Parameter(Mandatory = $false)]
 	[string]$NUGET = "nuget.exe"
 )
@@ -32,10 +35,12 @@ Write-Output "`nINFO: VS_TEST_CONSOLE:$VS_TEST_CONSOLE"
 
 function ExecCommandLine($cmd0, $message) {
 	$cmd = $cmd0.Replace("~", "`"")
+	Write-Output ""
 	Write-Output " * * * * * * * * * * * * * * * * * * * * * * * *"
 	Write-Output " * $message"
 	Write-Output " * * * * * * * * * * * * * * * * * * * * * * * *"
 	Write-Output "Command Line:$cmd"
+	Write-Output ""
 	iex "& $cmd"
 	if ($LASTEXITCODE -ne 0) {
 		Write-Error "ERROR: Build Error, cmd:$cmd0"
@@ -43,9 +48,14 @@ function ExecCommandLine($cmd0, $message) {
 	}
 }
 
-ExecCommandLine "~$NUGET~ restore ~$SOLUTION~ " "Restoring packages"
-ExecCommandLine "~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION " "Building solution"
-ExecCommandLine "~$VS_TEST_CONSOLE~ ~WildCardExercice.net\bin\$CONFIGURATION\WildCardExercice.net.dll~ " "Running unit tests"
+
+if($ACTION -eq "build") {
+	ExecCommandLine "~$NUGET~ restore ~$SOLUTION~ " "Restoring packages"
+	ExecCommandLine "~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION " "Building solution"
+}
+if($ACTION -eq "unittest") {
+	ExecCommandLine "~$VS_TEST_CONSOLE~ ~WildCardExercice.net\bin\$CONFIGURATION\WildCardExercice.net.dll~ " "Running unit tests"
+}
 
 
 

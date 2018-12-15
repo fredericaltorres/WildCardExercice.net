@@ -20,6 +20,7 @@ pipeline {
 		JENKINS_WORKSPACE = "C:\\Program Files (x86)\\Jenkins\\workspace"
 		DEVENV_EXE = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\devenv.com"
 		VS_TEST_CONSOLE = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe"
+		BUILD_CONFIGURATION = "Release"
 	}
 
 
@@ -46,7 +47,16 @@ pipeline {
 				script {
 					echo "Build .NET Code . . ."
 					// echo "GetEnvironmentVariablesAsPowerShellCommandLine: ${GetEnvironmentVariablesAsPowerShellCommandLine()}"
-					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION 'Release' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
+					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -ACTION build -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
+				}
+			}
+		}
+
+		stage('Run unit tests') {
+			steps {
+				script {
+					echo "Run unit tests . . ."
+					powershell(script: ".\\WildCardExercice.net\\build\\build.ps1 -ACTION unittest -SOLUTION 'WildCardExercice.net.sln' -CONFIGURATION '${env.BUILD_CONFIGURATION}' -Branch '${SourceBranch}' -DEVENV_EXE:'${env.DEVENV_EXE}' -VS_TEST_CONSOLE:'${VS_TEST_CONSOLE}'")
 				}
 			}
 		}
