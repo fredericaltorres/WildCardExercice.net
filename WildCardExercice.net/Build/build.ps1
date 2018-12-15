@@ -14,3 +14,5 @@ $ErrorActionPreference 		= "Stop"
 
 Write-Output "`nINFO: Building branch $Branch"
 
+dir
+
