@@ -32,7 +32,8 @@ cmd.exe /c dir /b/s
 
 $cmd = " ~$DEVENV_EXE~ ~$SOLUTION~ /build $CONFIGURATION ".Replace("~", "`"")
 Write-Output "About to execute build Command:$cmd"
-& $cmd
+iex "& $cmd"
+
 if ($LASTEXITCODE -ne 0) {
 	Write-Error "ERROR: Build Error"
 	exit 1
