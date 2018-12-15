@@ -88,9 +88,9 @@ pipeline {
 
 def GetEnvironmentVariablesAsPowerShellCommandLine() {
     echo "*** GetEnvironmentVariablesAsPowerShellCommandLine ***"
-	def r = ""
+	def r = "ok"
     env.each {
-		key, value -> r = r + "-${key}='${value}'"
+		key, value -> echo "${key}: ${value}"
 	}
 	return r
 }
